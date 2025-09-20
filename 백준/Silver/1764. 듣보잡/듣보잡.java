@@ -12,20 +12,22 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
 
-        Set<String> set1 = new TreeSet<>();
-        Set<String> set2 = new HashSet<>();
+        Set<String> set = new HashSet<>();
+        List<String> result = new ArrayList<>();
 
         for (int i = 0; i < N; i++) {
-            set1.add(br.readLine());
+            set.add(br.readLine());
         }
 
         for (int i = 0; i < M; i++) {
-            set2.add(br.readLine());
+            String str = br.readLine();
+            if(set.contains(str)) result.add(str);
         }
 
-        set1.retainAll(set2);
-        bw.write(set1.size() + "\n");
-        for (String name : set1) {
+        result.sort(Comparator.naturalOrder());
+
+        bw.write(result.size() + "\n");
+        for (String name : result) {
             bw.write(name + "\n");
         }
         br.close();
