@@ -11,7 +11,7 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         String str;
         while (!(str = br.readLine()).equals(".")) {
-            bw.write(isBalanced(str) + "\n");
+            bw.write(isBalanced(str));
             bw.flush();
         }
         bw.close();
@@ -22,15 +22,15 @@ public class Main {
         for (char c : str.toCharArray()) {
             if (c == '[' || c == '(') stack.push(c);
             else if (c == ']') {
-                if (stack.isEmpty() || stack.peek() != '[') return "no";
+                if (stack.isEmpty() || stack.peek() != '[') return "no\n";
                 stack.pop();
             } else if (c == ')') {
-                if (stack.isEmpty() || stack.peek() != '(') return "no";
+                if (stack.isEmpty() || stack.peek() != '(') return "no\n";
                 stack.pop();
             }
         }
-        if (stack.isEmpty()) return "yes";
-        return "no";
+        if (stack.isEmpty()) return "yes\n";
+        return "no\n";
     }
 
     public static void main(String[] args) throws Exception {
