@@ -31,7 +31,10 @@ public class Main {
         });
 
         for (List<Integer> li : list) {
-            bw.write(li.get(0) + " " + li.get(1) + "\n");
+            bw.write(String.valueOf(li.get(0)));
+            bw.write(" ");
+            bw.write(String.valueOf(li.get(1)));
+            bw.write("\n");
         }
 
         bw.flush();
