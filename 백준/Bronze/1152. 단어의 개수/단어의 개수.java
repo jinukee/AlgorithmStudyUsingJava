@@ -9,13 +9,8 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int result = 0;
 
-        while (st.hasMoreTokens()) {
-            st.nextToken();
-            result++;
-        }
-        bw.write(String.valueOf(result));
+        bw.write(String.valueOf(st.countTokens()));
         bw.flush();
         br.close();
         bw.close();
