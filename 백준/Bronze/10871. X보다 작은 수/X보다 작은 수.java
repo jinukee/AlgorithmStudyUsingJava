@@ -1,0 +1,32 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+
+public class Main {
+	public void solution() throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int X = Integer.parseInt(st.nextToken());
+
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			int target = Integer.parseInt(st.nextToken());
+			if (X > target) {
+				bw.write(target + " ");
+			}
+		}
+
+		bw.flush();
+		br.close();
+		bw.close();
+	}
+
+	public static void main(String[] args) throws Exception {
+		new Main().solution();
+	}
+}
