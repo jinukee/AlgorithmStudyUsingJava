@@ -1,0 +1,41 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Main {
+    private static final StringBuilder sb = new StringBuilder();
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+
+        makeStarAscending(N);
+        makeStartDescending(N);
+
+        System.out.print(sb);
+        br.close();
+    }
+
+    private static void makeStarAscending(int n) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                sb.append(" ");
+            }
+            for (int k = 0; k < (2 * i) + 1; k++) {
+                sb.append("*");
+            }
+            sb.append("\n");
+        }
+    }
+
+    private static void makeStartDescending(int n) {
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < i + 1; j++) {
+                sb.append(" ");
+            }
+            for (int k = 0; k < 2 * (n - 2 - i) + 1; k++) {
+                sb.append("*");
+            }
+            sb.append("\n");
+        }
+    }
+}
