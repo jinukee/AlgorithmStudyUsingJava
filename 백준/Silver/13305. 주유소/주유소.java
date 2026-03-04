@@ -23,14 +23,14 @@ public class Main {
 
         long cost = 0;
         int i = 0;
-        int j = 0;
+        int currentMin = Integer.MAX_VALUE;
 
-        while (j < N - 1) {
-            cost += (long) costs[i] * dist[j++];
-            // 지금의 도시에서 기름을 채우는게 유리한 경우에만 기름 값 갱신(greedy)
-            if (costs[i] > costs[i + 1]) {
-                i++;
+        while (i < N - 1) {
+            // 기존까지와 비교해 기름값이 더 저렴한 지역을 발견하면 기름값 갱신(greedy)
+            if (currentMin > costs[i]) {
+                currentMin = costs[i];
             }
+            cost += (long) currentMin * dist[i++];
         }
 
         System.out.println(cost);
