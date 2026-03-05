@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Main {
 
+    private static int[] temp;
     private static int answer = -1;
     private static int K;
     private static int count = 0;
@@ -16,6 +17,8 @@ public class Main {
         K = Integer.parseInt(st.nextToken());
 
         int[] arr = new int[N];
+        temp = new int[N];
+
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
@@ -26,6 +29,10 @@ public class Main {
     }
 
     private static void mergeSort(int[] arr, int left, int right) {
+        if (answer != -1) {
+            return;
+        }
+
         if (left < right) {
             int mid = left + (right - left) / 2;
             mergeSort(arr, left, mid);
@@ -35,54 +42,35 @@ public class Main {
     }
 
     private static void merge(int[] arr, int left, int mid, int right) {
+        int i = left;
+        int j = mid + 1;
+        int t = 0;
 
-        int l1 = mid - left + 1;
-        int l2 = right - mid;
-
-        int[] L = new int[l1];
-        for (int i = 0; i < l1; i++) {
-            L[i] = arr[left + i];
-        }
-        int[] R = new int[l2];
-        for (int i = 0; i < l2; i++) {
-            R[i] = arr[mid + 1 + i];
-        }
-
-        int l = 0, r = 0;
-        while (l < l1 && r < l2) {
-            if (L[l] < R[r]) {
-                arr[left++] = L[l];
-                count++;
-                if (count == K) {
-                    answer = L[l];
-                }
-                l++;
+        while (i <= mid && j <= right) {
+            if (arr[i] < arr[j]) {
+                temp[t++] = arr[i++];
             } else {
-                arr[left++] = R[r];
-                count++;
-                if (count == K) {
-                    answer = R[r];
-                }
-                r++;
+                temp[t++] = arr[j++];
             }
         }
 
-        while (l < l1) {
-            arr[left++] = L[l];
-            count++;
-            if (count == K) {
-                answer = L[l];
-            }
-            l++;
+        while (i <= mid) {
+            temp[t++] = arr[i++];
         }
 
-        while (r < l2) {
-            arr[left++] = R[r];
+        while (j <= right) {
+            temp[t++] = arr[j++];
+        }
+
+        i = left;
+        t = 0;
+        while (i <= right) {
             count++;
             if (count == K) {
-                answer = R[r];
+                answer = temp[t];
+                return;
             }
-            r++;
+            arr[i++] = temp[t++];
         }
     }
 }
