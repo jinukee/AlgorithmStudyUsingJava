@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Main {
 
-    private static char[][] grid;
+    private static int[][] grid;
     private static int R, C;
     private static final boolean[] visited = new boolean[26];
     private static int ans = 0;
@@ -18,16 +18,16 @@ public class Main {
 
         R = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
-        grid = new char[R][C];
+        grid = new int[R][C];
 
         for (int i = 0; i < R; i++) {
             String row = br.readLine();
             for (int j = 0; j < C; j++) {
-                grid[i][j] = row.charAt(j);
+                grid[i][j] = row.charAt(j) - 'A';
             }
         }
 
-        visited[grid[0][0] - 'A'] = true;
+        visited[grid[0][0]] = true;
         dfs(new int[]{0, 0}, 1);
         System.out.println(ans);
     }
@@ -39,14 +39,14 @@ public class Main {
             int nx = now[0] + DX[i];
             int ny = now[1] + DY[i];
             if (canGo(nx, ny)) {
-                visited[grid[nx][ny] - 'A'] = true;
+                visited[grid[nx][ny]] = true;
                 dfs(new int[]{nx, ny}, count + 1);
-                visited[grid[nx][ny] - 'A'] = false;
+                visited[grid[nx][ny]] = false;
             }
         }
     }
 
     private static boolean canGo(int x, int y) {
-        return x >= 0 && y >= 0 && x < R && y < C && !visited[grid[x][y] - 'A'];
+        return x >= 0 && y >= 0 && x < R && y < C && !visited[grid[x][y]];
     }
 }
