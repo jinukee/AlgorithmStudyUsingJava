@@ -8,7 +8,7 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 1; i <= 100000; i++) {
+        for (int i = 1; i <= N; i++) {
             sb.append(i);
         }
 
