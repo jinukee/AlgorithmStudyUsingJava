@@ -1,10 +1,10 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -12,38 +12,36 @@ public class Main {
         int K = Integer.parseInt(st.nextToken());
         int N = Integer.parseInt(st.nextToken());
 
-        int[] arr = new int[K];
+        long[] wires = new long[K];
 
-        long max = 0;
-
+        long high = 0;
         for (int i = 0; i < K; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
-            if (max < arr[i]) {
-                max = arr[i];
-            }
+            wires[i] = Integer.parseInt(br.readLine());
+            high = Math.max(high, wires[i]);
         }
 
-        max++;
+        System.out.println(solution(wires, N, high));
+    }
 
-        long min = 0;
-        long mid = 0;
+    private static long solution(long[] wires, int N, long high) {
+        high++;
+        long low = 1;
 
-        while (min < max) {
-            mid = (max + min) / 2;
+        while (low < high) {
+            long mid = low + (high - low) / 2;
 
             long count = 0;
-
-            for (int i = 0; i < arr.length; i++) {
-                count += (arr[i] / mid);
+            for (long wire : wires) {
+                count += wire / mid;
             }
 
-            if (count < N) {
-                max = mid;
+            if (count >= N) {
+                low = mid + 1;
             } else {
-                min = mid + 1;
+                high = mid;
             }
-
         }
-        System.out.println(min - 1);
+
+        return low - 1;
     }
 }
