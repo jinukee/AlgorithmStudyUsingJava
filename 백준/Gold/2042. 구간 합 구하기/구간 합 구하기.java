@@ -70,15 +70,17 @@ public class Main {
 
     // index 값의 value 를 new value로 업데이트
     static long update(int node, int start, int end, int index, long newValue) {
-        if (start > index || end < index) {
-            return tree[node];
-        }
-
-        if (start == end) {
+        // base case
+        if (start == end) { // == index
             return tree[node] = newValue;
         }
 
         int mid = (start + end) / 2;
-        return tree[node] = update(node * 2, start, mid, index, newValue) + update(node * 2 + 1, mid + 1, end, index, newValue);
+
+        if (index <= mid) {
+            return tree[node] = update(node * 2, start, mid, index, newValue) + tree[node * 2 + 1];
+        } else {
+            return tree[node] = tree[node * 2] + update(node * 2 + 1, mid + 1, end, index, newValue);
+        }
     }
 }
