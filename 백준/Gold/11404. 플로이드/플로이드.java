@@ -1,60 +1,65 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-    private static final int INF = 100_000_000;
-    private static final StringBuilder sb = new StringBuilder();
+
+    static int[][] grid;
+    static final int INF = (int) 1e7;
+    static int N;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-        int N = Integer.parseInt(br.readLine());
+
+        N = Integer.parseInt(br.readLine());
         int M = Integer.parseInt(br.readLine());
 
-        int[][] adj = new int[N + 1][N + 1];
-        for (int[] row : adj) {
-            Arrays.fill(row, INF);
-        }
+        grid = new int[N + 1][N + 1];
 
         for (int i = 0; i <= N; i++) {
-            adj[i][i] = 0;
+            for (int j = 0; j <= N; j++) {
+                grid[i][j] = INF;
+            }
         }
 
-        for (int i = 0; i < M; i++) {
+        for (int i = 1; i <= N; i++) {
+            grid[i][i] = 0;
+        }
+
+        while (M-- > 0) {
             st = new StringTokenizer(br.readLine());
             int u = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
             int cost = Integer.parseInt(st.nextToken());
-            adj[u][v] = Math.min(adj[u][v], cost);
+
+            grid[u][v] = Math.min(cost, grid[u][v]);
         }
 
-        floyd(adj, N);
-        System.out.print(sb);
+        System.out.print(floyd());
     }
 
-    private static void floyd(int[][] adj, int N) {
+    static String floyd() {
+        StringBuilder sb = new StringBuilder();
+
         for (int k = 1; k <= N; k++) {
-            for (int x = 1; x <= N; x++) {
-                for (int y = 1; y <= N; y++) {
-                    if (adj[x][y] > adj[x][k] + adj[k][y]) {
-                        adj[x][y] = adj[x][k] + adj[k][y];
-                    }
+            for (int i = 1; i <= N; i++) {
+                for (int j = 1; j <= N; j++) {
+                    grid[i][j] = Math.min(grid[i][k] + grid[k][j], grid[i][j]);
                 }
             }
         }
 
         for (int i = 1; i <= N; i++) {
             for (int j = 1; j <= N; j++) {
-                int now = adj[i][j];
-                if (now == INF) {
+                if (grid[i][j] == INF) {
                     sb.append(0).append(" ");
                 } else {
-                    sb.append(now).append(" ");
+                    sb.append(grid[i][j]).append(" ");
                 }
             }
             sb.append("\n");
         }
+        return sb.toString();
     }
 }
