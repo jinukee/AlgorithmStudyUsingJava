@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -27,6 +27,7 @@ public class Main {
 			adj = new ArrayList[N + 1];
 			indegree = new int[N + 1];
 			cost = new int[N + 1];
+			int[] prefixCost = new int[N + 1];
 
 			for (int i = 1; i <= N; i++) {
 				adj[i] = new ArrayList<>();
@@ -48,7 +49,7 @@ public class Main {
 
 			int W = Integer.parseInt(br.readLine());
 
-			Queue<int[]> q = new PriorityQueue<>((a, b) -> Integer.compare(a[1], b[1])); // nodeIdx, endTime
+			Queue<int[]> q = new ArrayDeque<>(); // nodeIdx, endTime
 			// 매 단계마다 동시에 진행할 수 있는 작업 중 가장 마지막에 끝나는 작업에 이어서 다음 작업 시간을 계산해줘야함.
 			for (int i = 1; i <= N; i++) {
 				if (indegree[i] == 0) {
@@ -65,12 +66,16 @@ public class Main {
 				}
 
 				for (int neighbor : adj[cur[0]]) {
+
+					if (prefixCost[neighbor] < cost[neighbor] + cur[1]) {
+						prefixCost[neighbor] = cost[neighbor] + cur[1];
+					}
+
 					if (--indegree[neighbor] == 0) {
-						q.offer(new int[] { neighbor, cur[1] + cost[neighbor] });
+						q.offer(new int[] { neighbor, prefixCost[neighbor] });
 					}
 				}
 			}
-
 		}
 		System.out.print(sb);
 	}
