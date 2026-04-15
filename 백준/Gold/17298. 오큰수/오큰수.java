@@ -26,7 +26,7 @@ public class Main {
 		StringBuilder sb = new StringBuilder();
 
 		Deque<Integer> stack = new ArrayDeque<>();
-		Deque<Integer> ans = new ArrayDeque<>();
+		int[] ans = new int[n];
 
 		int p = n - 1;
 		while (p >= 0) {
@@ -35,17 +35,17 @@ public class Main {
 			}
 
 			if (stack.isEmpty()) {
-				ans.push(-1);
+				ans[p] = -1;
 			} else {
-				ans.push(stack.peek());
+				ans[p] = stack.peek();
 			}
 
 			stack.push(arr[p]);
 			p--;
 		}
 
-		while (!ans.isEmpty()) {
-			sb.append(ans.pop()).append(" ");
+		for (int a : ans) {
+			sb.append(a).append(" ");
 		}
 
 		return sb.toString();
