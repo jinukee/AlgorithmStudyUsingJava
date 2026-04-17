@@ -2,14 +2,13 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
     static final int[] DX = {0, 0, 1, -1};
     static final int[] DY = {1, -1, 0, 0};
 
     static int R, C;
     static char[][] grid;
-    static List<int[]> firePlaces = new ArrayList<>();
-    static boolean[][] visited;
+    static int[][] fireTime;
+    static int[][] dist;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,84 +18,65 @@ public class Main {
         C = Integer.parseInt(st.nextToken());
 
         grid = new char[R][C];
-        visited = new boolean[R][C];
+        fireTime = new int[R][C];
+        dist = new int[R][C];
 
-        int[] starts = new int[2];
+        Queue<int[]> fireQ = new ArrayDeque<>();
+        Queue<int[]> humanQ = new ArrayDeque<>();
 
         for (int i = 0; i < R; i++) {
             String input = br.readLine();
             for (int j = 0; j < C; j++) {
-                char value = input.charAt(j);
-                if (value == 'F') {
-                    firePlaces.add(new int[]{i, j});
-                } else if (value == 'J') {
-                    starts[0] = i;
-                    starts[1] = j;
+                grid[i][j] = input.charAt(j);
+                fireTime[i][j] = -1;
+                dist[i][j] = -1;
+
+                if (grid[i][j] == 'F') {
+                    fireQ.offer(new int[]{i, j});
+                    fireTime[i][j] = 0;
+                } else if (grid[i][j] == 'J') {
+                    humanQ.offer(new int[]{i, j});
+                    dist[i][j] = 0;
                 }
-                grid[i][j] = value;
             }
         }
 
-        int ans = bfs(starts);
-        if (ans == -1) {
-            System.out.println("IMPOSSIBLE");
-        } else {
-            System.out.println(ans);
+        while (!fireQ.isEmpty()) {
+            int[] cur = fireQ.poll();
+            for (int i = 0; i < 4; i++) {
+                int nx = cur[0] + DX[i];
+                int ny = cur[1] + DY[i];
+                if (inRange(nx, ny) && grid[nx][ny] != '#' && fireTime[nx][ny] == -1) {
+                    fireTime[nx][ny] = fireTime[cur[0]][cur[1]] + 1;
+                    fireQ.offer(new int[]{nx, ny});
+                }
+            }
         }
-    }
 
-    static int bfs(int[] starts) {
-
-        Queue<int[]> q = new ArrayDeque<>();
-        visited[starts[0]][starts[1]] = true;
-        q.offer(new int[]{starts[0], starts[1], 1});
-
-        int flag = 0;
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
+        while (!humanQ.isEmpty()) {
+            int[] cur = humanQ.poll();
             int x = cur[0];
             int y = cur[1];
-            int cnt = cur[2];
-            if (x == 0 || y == 0 || x == R - 1 || y == C - 1) {
-                return cnt;
-            }
 
-            if (flag != cnt) {
-                flag = cnt;
-                if (!firePlaces.isEmpty()) {
-                    firePlaces = fire();
-                }
+            if (x == 0 || y == 0 || x == R - 1 || y == C - 1) {
+                System.out.println(dist[x][y] + 1);
+                return;
             }
 
             for (int i = 0; i < 4; i++) {
                 int nx = x + DX[i];
                 int ny = y + DY[i];
 
-                if (inRange(nx, ny) && grid[nx][ny] == '.' && !visited[nx][ny]) {
-                    visited[nx][ny] = true;
-                    q.offer(new int[]{nx, ny, cnt + 1});
+                if (inRange(nx, ny) && grid[nx][ny] == '.' && dist[nx][ny] == -1) {
+                    if (fireTime[nx][ny] == -1 || dist[x][y] + 1 < fireTime[nx][ny]) {
+                        dist[nx][ny] = dist[x][y] + 1;
+                        humanQ.offer(new int[]{nx, ny});
+                    }
                 }
             }
         }
 
-        return -1;
-    }
-
-    static List<int[]> fire() {
-        List<int[]> nextPath = new ArrayList<>();
-        for (int[] cur : firePlaces) {
-            for (int i = 0; i < 4; i++) {
-                int nx = cur[0] + DX[i];
-                int ny = cur[1] + DY[i];
-
-                if (inRange(nx, ny) && grid[nx][ny] == '.') {
-                    grid[nx][ny] = 'F';
-                    nextPath.add(new int[]{nx, ny});
-                }
-            }
-        }
-
-        return nextPath;
+        System.out.println("IMPOSSIBLE");
     }
 
     static boolean inRange(int x, int y) {
